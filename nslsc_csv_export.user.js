@@ -3,7 +3,7 @@
 // @namespace    http://mdbell.me/
 // @version      1.0
 // @description  Exports your payments and interest charges into a format that YNAB likes!
-// @author       You
+// @author       mdbell
 // @match        https://*.canada.ca/*loantransactionhistory.aspx
 // @grant        none
 // @require http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js
