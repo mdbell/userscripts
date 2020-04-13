@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NSLSC CSV Export
 // @namespace    http://mdbell.me/
-// @version      1.1
+// @version      1.2
 // @description  Exports your payments and interest charges into a format that YNAB likes!
 // @author       mdbell
 // @match        https://*.canada.ca/*loantransactionhistory.aspx
@@ -40,7 +40,7 @@ function updateExportDate(date){
 }
 
 function exportCSV(source, downloadAll){
-    var csv = "data:text/csv;charset=utf-8,Date, Payee, Memo, Outflow, Inflow\n";
+    var csv = "Date, Payee, Memo, Outflow, Inflow\n";
     var table = $("#tgrid > tbody > tr");
     var count = 0;
     table.each(function(index, row){
@@ -59,7 +59,7 @@ function exportCSV(source, downloadAll){
     });
     if(count > 0){
         updateExportDate(new Date());
-        $(source).attr("href", csv).attr("download", "loan_" + lastUpdate.getTime() + ".csv");
+        $(source).attr("href", "data:text/csv;charset=utf-8;base64," + btoa(csv)).attr("download", "loan_" + lastUpdate.getTime() + ".csv");
         return true;
     }else{
         alert("No new transactions!");
