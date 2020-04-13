@@ -5,7 +5,8 @@
 // @description  Exports your payments and interest charges into a format that YNAB likes!
 // @author       mdbell
 // @match        https://*.canada.ca/*loantransactionhistory.aspx
-// @grant        none
+// @grant       GM.getValue
+// @grant       GM.setValue
 // @require http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js
 // @require https://raw.github.com/openexchangerates/accounting.js/master/accounting.min.js
 // ==/UserScript==
@@ -13,6 +14,11 @@
 var default_payee= "NSLSC";
 var interest_memo= "Interest";
 var payment_memo = "Payment";
+
+var lastUpdate = loadDate("last_update");
+loadDate("last_update").then(function (date) {
+    lastUpdate = date;
+});
 
 var exportBtn = document.createElement("a");
 exportBtn.href = "#";
@@ -29,7 +35,8 @@ function exportCSV(){
     table.each(function(index, row){
         var data = mapRow(row.cells);
         //skip rows with no balance/amount (the current interest charges, as well as the opening/closing balances)
-        if(data.balance == 0 || data.amount == 0){
+        //also skip if the date is before our last update
+        if(data.balance == 0 || data.amount == 0 || data.date < lastUpdate){
             return;
         }
         //add our payment
@@ -38,19 +45,41 @@ function exportCSV(){
         csv += data.date + ',' + default_payee + ',' + interest_memo + ',' + Math.abs(data.interest) + ',\n';
 
     });
+    lastUpdate = new Date();
+    saveDate("last_update", lastUpdate);
     exportBtn.href=csv;
     return true;
 }
+
+function saveDate(key, date){
+    return GM.setValue(key, date.toISOString());
+}
+
+function loadDate(key, deflt=new Date()) {
+    var defStr = deflt.toISOString();
+    return GM.getValue(key, deflt.toISOString()).then(function(value){
+        var res = new Date(value);
+        if(value == defStr){
+            saveDate(key, res);
+        }
+        return new Date(res);
+    });
+}
+
 function mapRow(cells){
     var res = {};
     //date
-    res.date = formatStr(cells[0].textContent);
+    res.date = getDate(cells[0].textContent);
     res.desc = formatStr(cells[1].textContent);
     res.amount = accounting.unformat(cells[2].textContent);
     res.interest = accounting.unformat(cells[3].textContent);
     res.principal = accounting.unformat(cells[4].textContent);
     res.balance = accounting.unformat(cells[5].textContent);
     return res;
+}
+
+function getDate(str){
+    return new Date(formatStr(str));
 }
 
 function formatStr(str){
