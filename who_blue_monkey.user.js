@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  Who Blue as a tampermonkey script, based on code from @wesbos
-// @author       You
+// @author       wesbos (https://twitter.com/wesbos), mdbell
 // @match        https://twitter.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=twitter.com
 // @grant        none
