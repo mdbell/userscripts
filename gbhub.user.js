@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         GBHub
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  Get that senior developer position boys.
 // @author       mdbell
 // @match        https://github.com/mdbell
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=github.com
-// @require      https://raw.githubusercontent.com/mdbell/gameboy.js/master/dist/gameboy.min.js
+// @require      https://raw.githubusercontent.com/mdbell/gameboy.js/master/dist/gameboy.min.js?1
 // @require      http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
 // @require      https://gist.github.com/raw/2625891/waitForKeyElements.js
 // @grant        none
